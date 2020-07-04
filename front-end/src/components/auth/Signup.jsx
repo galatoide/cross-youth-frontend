@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AuthService from './auth-service';
 
-class Signup extends Component {
+export default class Signup extends Component {
   state = {
     username: '',
     password: '',
@@ -28,8 +28,9 @@ class Signup extends Component {
                 username: '', 
                 password: ''
             });
+            localStorage.setItem("loggedin", true);
+            this.props.history.push("/dashboard")
             this.props.setCurrentUser(response)
-            this.props.history.push("/projects")
         })
         .catch(error => console.log(error))
 }
@@ -67,5 +68,3 @@ class Signup extends Component {
     )
   }
 }
-
-export default Signup

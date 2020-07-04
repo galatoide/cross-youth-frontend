@@ -27,6 +27,7 @@ export default class Login extends Component {
                   username: '',
                   password: ''
                 });
+                localStorage.setItem("loggedin", true);
                 this.props.history.push('/dashboard'); // where it redirects after sucessful login
             })
   }
