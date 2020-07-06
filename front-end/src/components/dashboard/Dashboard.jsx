@@ -3,7 +3,8 @@ import GroupList from '../groups/GroupsList'
 import Notifications from './Notifications'
 import AuthService from '../auth/auth-service';
 
-class Dashboard extends Component {
+export default class Dashboard extends Component {
+
   service = new AuthService();
 
   render() {
@@ -22,5 +23,3 @@ class Dashboard extends Component {
     )
   }
 }
-
-export default Dashboard

@@ -8,6 +8,7 @@ import Dashboard from './components//dashboard/Dashboard';
 import GroupsDetails from './components/groups/GroupsDetails';
 import AuthService from './components/auth/auth-service';
 import Homepage from './components/auth/Homepage';
+import User from './components/dashboard/User';
 
 export default class App extends React.Component {
   state = {
@@ -58,14 +59,29 @@ export default class App extends React.Component {
           <Route exact path='/login' render={(props) => <Login setCurrentUser={this.setCurrentUser} {...props} /> } />
           <Route exact path='/signup' render={(props) => <Signup setCurrentUser={this.setCurrentUser} {...props} /> } />
           <Route exact path='/logout' component={Homepage} Redirect to="/"/>
-          <Route path='/groups/:id' component={GroupsDetails} />
-          <Route path='/dashboard' render={(props) => {
+          <Route exact path='/groups/:id' component={GroupsDetails} />
+          <Route exact path='/dashboard' render={(props) => {
             if (localStorage.getItem("loggedin")) {
               return <Dashboard loggedInUser={this.state.loggedInUser} {...props} />
             } else {
               return <Redirect to="/login" />
             }}}
            />
+          <Route exact path='/user' render={(props) => {
+            if (localStorage.getItem("loggedin")) {
+              return <User loggedInUser={this.state.loggedInUser} {...props} />
+            } else {
+              return <Redirect to="/login" />
+            }}}
+           />
+           {/*If weird link go to homepage  */}
+          <Route path='/' render={(props) => {
+              if (localStorage.getItem("loggedin")) {
+                return <Homepage loggedInUser={this.state.loggedInUser} {...props} />
+              } else {
+                return <Redirect to="/" />
+              }}}
+            />
         </Switch>
       </div>
     );

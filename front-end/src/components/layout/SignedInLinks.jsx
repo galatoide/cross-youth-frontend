@@ -24,10 +24,9 @@ export default class SignedInLinks extends React.Component {
         <ul className="right">
           <li><NavLink to='/new-group'>New Group</NavLink></li>
           <li><NavLink to='/' onClick={this.logoutUser}>Log Out</NavLink></li>
-          <li><NavLink to='/' className="btn btn-floating pink lighten-1">WC</NavLink></li>
+          <li><NavLink to='/user' className="btn btn-floating pink lighten-1">WC</NavLink></li>
         </ul>
       </div>
     )
-
   }
 } 
