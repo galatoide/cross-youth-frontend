@@ -1,11 +1,50 @@
 import React, { Component } from 'react';
 import AuthService from '../auth/auth-service';
+import axios from 'axios';
+import M from "materialize-css";
+
+const url = process.env.CLOUDINARY_API_BASE_URL;
+const preset = process.env.CLOUDINARY_UPLOAD_PRESETS_NAME;
 
 export default class User extends Component {
     state = {  }
 
     service = new AuthService();
+
+    // Materialize
+    componentDidMount() { 
+      // Auto initialize all the things!
+      M.AutoInit();
+      // this.props
+    }
     
+    handleChange = (event) => {
+      const {name, value} = event.target;
+      this.setState({[name]: value});
+    }
+    
+    handleFileChange = (event) => {
+      this.setState({ file: event.target.files[0]});
+    }
+
+    handleSubmit = (event) => {
+      event.preventDefault();
+      const uploadData = new FormData();
+      uploadData.append("profileImageUrl", this.state.file);
+      axios.post('http://localhost:5000/upload', uploadData)
+          .then((response) => {
+              console.log('image uploaded', response);
+              
+              axios.post('http://localhost:5000/images/create', {
+                  profileImageUrl: response.data.profileImageUrl
+              })
+              .then((response) => {
+                  console.log('image created', response);
+                  this.setState({ name: '', description: '', file: '', feedbackMessage: 'Image uploaded sucessfully'});
+              })
+          })
+    }  
+
     render() { 
         console.log('console: ',this.props)
         return ( 
@@ -22,11 +61,48 @@ export default class User extends Component {
           
           <div id="profile-page-header" className="card">
               <div className="card-image waves-effect waves-block waves-light">
-                  <img className="activator" src="IMAGE" alt="user background"/>                    
+                  <img style={{'max-height':'350px'}} className="activator" src="https://images.pexels.com/photos/1668211/pexels-photo-1668211.jpeg?cs=srgb&dl=photo-of-abstract-painting-on-canvas-1668211.jpg&fm=jpg" alt="user background"/>                    
               </div>
               <figure className="card-profile-image">
-                  <img style={{'max-width':'150px'}} src="https://www.jodilogik.com/wordpress/wp-content/uploads/2016/05/people-1.png" alt="profile image" className="circle z-depth-2 responsive-img activator"/>
+              {this.props.loggedInUser &&
+                  <img style={{'max-width':'150px'}} src={this.props.loggedInUser.profileImageUrl} alt="profile image" className="circle z-depth-2 responsive-img activator"/>
+              }
+                  <a href='#update-user' class='btn green modal-trigger'>Update User</a>
+              <div class='modal' id='update-user'>
+                <div class="modal-content">
+                  <h4>User details</h4>
+                  <form id="signup-form" className="white" onSubmit={this.handleFormSubmit}>
+                    <h5 className="grey-text text-darken-3">Sign Up</h5>
+                    {/* <div className="input-field">
+                      <label>Username</label>
+                      <input type="text" name="username" value={this.state.username} onChange={this.handleChange}/>
+                    </div>
+                    <div className="input-field">
+                      <label htmlFor="email">Email</label>
+                      <input type="email" name='email' id='signup-email' onChange={this.handleChange} />
+                    </div>
+                    <div className="input-field">
+                      <label>Password</label>
+                      <input type="password" value={this.state.password} name='password' onChange={this.handleChange} />
+                    </div>
+                    <div className="input-field">
+                      <label htmlFor="firstName">First Name</label>
+                      <input type="text" name='firstName' id='signup-firstName' onChange={this.handleChange} />
+                    </div>
+                    <div className="input-field">
+                      <label htmlFor="lastName">Last Name</label>
+                      <input type="text" name='lastName' id='signup-lastName' onChange={this.handleChange} />
+                    </div> */}
+                    <input type="file" onChange={this.handleFileChange} /> 
+                    <div className="input-field">
+                      <input className="btn pink lighten-1 z-depth-0" type="submit" value="Update" />
+                    </div>
+                  </form>
+                </div>
+              </div>
               </figure>
+
+
               <div className="card-content">
                 <div className="row">                  
                   {this.props.loggedInUser &&
@@ -265,11 +341,17 @@ export default class User extends Component {
               <div id="profile-page-wall-share" className="row">
                 <div className="col s12">
                   <ul className="tabs tab-profile z-depth-1 light-blue">
-                    <li className="tab col s3"><a className="white-text waves-effect waves-light active" href="#UpdateStatus"><i className="mdi-editor-border-color"></i> Update Status</a>
+                    <li className="tab col s3">
+                      <a className="white-text waves-effect waves-light active" href="#UpdateStatus">
+                      <i className="mdi-editor-border-color"></i> Update Status</a>
                     </li>
-                    <li className="tab col s3"><a className="white-text waves-effect waves-light" href="#AddPhotos"><i className="mdi-image-camera-alt"></i> Add Photos</a>
+                    <li className="tab col s3">
+                      <a className="white-text waves-effect waves-light" href="#AddPhotos">
+                      <i className="mdi-image-camera-alt"></i> Add Photos</a>
                     </li>
-                    <li className="tab col s3"><a className="white-text waves-effect waves-light" href="#CreateAlbum"><i className="mdi-image-photo-album"></i> Create Album</a>
+                    <li className="tab col s3">
+                      <a className="white-text waves-effect waves-light" href="#CreateAlbum">
+                      <i className="mdi-image-photo-album"></i> Create Album</a>
                     </li>                      
                   </ul>
                              <div id="UpdateStatus" className="tab-content col s12  grey lighten-4">

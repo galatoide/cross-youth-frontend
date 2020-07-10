@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default class AddProject extends React.Component {
+export default class NewGroup extends React.Component {
     state = {
         title:'',
         description: ''

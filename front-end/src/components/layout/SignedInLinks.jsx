@@ -3,6 +3,13 @@ import { NavLink } from 'react-router-dom'
 import AuthService from '../auth/auth-service';
 
 export default class SignedInLinks extends React.Component {
+  state = {
+    username: '',
+    password: '',
+    email: '',
+    firstName: '',
+    lastName: ''
+  }
 
   service = new AuthService();
 
@@ -22,7 +29,7 @@ export default class SignedInLinks extends React.Component {
     return (
       <div>
         <ul className="right">
-          <li><NavLink to='/new-group'>New Group</NavLink></li>
+          <li><NavLink to='/groups'>All Groups</NavLink></li>
           <li><NavLink to='/' onClick={this.logoutUser}>Log Out</NavLink></li>
           <li><NavLink to='/user' className="btn btn-floating pink lighten-1">WC</NavLink></li>
         </ul>

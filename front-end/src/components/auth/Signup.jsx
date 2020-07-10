@@ -38,7 +38,8 @@ export default class Signup extends Component {
   render() {
     return (
       <div className="container">
-        <form id="signup-form" className="white" onSubmit={this.handleFormSubmit}>
+      <div class="row">
+        <form id="signup-form" className="white col s12" onSubmit={this.handleFormSubmit}>
           <h5 className="grey-text text-darken-3">Sign Up</h5>
           <div className="input-field">
             <label>Username</label>
@@ -46,24 +47,28 @@ export default class Signup extends Component {
           </div>
           <div className="input-field">
             <label htmlFor="email">Email</label>
-            <input type="email" name='email' id='signup-email' onChange={this.handleChange} />
+            <input type="email" name='email' id='signup-email' className='validate' onChange={this.handleChange} />
+            {/* <span class="helper-text" data-error="wrong" data-success="right">Helper text</span> */}
           </div>
           <div className="input-field">
             <label>Password</label>
             <input type="password" value={this.state.password} name='password' onChange={this.handleChange} />
           </div>
-          <div className="input-field">
+          <div class="row">
+          <div className="input-field col s6">
             <label htmlFor="firstName">First Name</label>
             <input type="text" name='firstName' id='signup-firstName' onChange={this.handleChange} />
           </div>
-          <div className="input-field">
+          <div className="input-field col s6">
             <label htmlFor="lastName">Last Name</label>
             <input type="text" name='lastName' id='signup-lastName' onChange={this.handleChange} />
-          </div>
+            </div>
+            </div>
           <div className="input-field">
             <input className="btn pink lighten-1 z-depth-0" type="submit" value="Sign up" />
           </div>
         </form>
+      </div>
       </div>
     )
   }
