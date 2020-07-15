@@ -11,13 +11,16 @@ import GroupsDetails from './components/groups/GroupsDetails';
 import AuthService from './components/auth/auth-service';
 import Homepage from './components/auth/Homepage';
 import User from './components/dashboard/User';
-import AddImage from './components/dashboard/AddImage';
 import GroupsList from './components/groups/GroupsList';
-import axios from 'axios';
 
 export default class App extends React.Component {
   state = {
-    loggedInUser: null 
+    loggedInUser: null,
+    listOfGroups: [],
+    title: '',
+    initials: '',
+    description: '',
+    activities: '', 
   }
   
   service = new AuthService();
@@ -28,13 +31,11 @@ export default class App extends React.Component {
     })
   }
   
-  
   // 1. save the user into the browser localstorage
   // OR
   // 2. check if the user is still loggedin by calling the backend
   componentDidMount() {
     this.fetchUser();
-    this.getAllGroups();
     M.AutoInit();
   }
 
@@ -53,15 +54,15 @@ export default class App extends React.Component {
     }
   }
 
-  getAllGroups = () => {
-    // Get list of project from the API we just built
-    axios.get('http://localhost:5000/groups', {withCredentials: true})
-        .then(responseFromAPI => {
-            this.setState({
-                listOfGroups: responseFromAPI.data
-            })
-        });
-  }
+  // getAllGroups = () => {
+  //   // Get list of project from the API we just built
+  //   axios.get('http://localhost:5000/groups', {withCredentials: true})
+  //       .then(responseFromAPI => {
+  //           this.setState({
+  //               listOfGroups: responseFromAPI.data
+  //           })
+  //       });
+  // }
 
   render(){
     this.fetchUser();
@@ -70,7 +71,6 @@ export default class App extends React.Component {
       <div>
       <Navbar setCurrentUser={this.setCurrentUser} loggedInUser={this.state.loggedInUser}/>
         <Switch>
-        <Route exact path='/addimage' component={AddImage} />
 
           <Route exact path='/' component={Homepage} />
           <Route exact path='/login' render={(props) => <Login setCurrentUser={this.setCurrentUser} {...props} /> } />
@@ -78,7 +78,7 @@ export default class App extends React.Component {
           <Route exact path='/logout' component={Homepage} Redirect to="/"/>
           <Route exact path="/groups" component={GroupsList} refreshGroups={this.getAllGroups}/>
           <Route exact path='/groups/:id' component={GroupsDetails} />
-          <Route exact path='/dashboard' render={(props) => {
+          <Route exact path='/dashboard' refreshGroups={this.getAllGroups} render={(props) => {
             if (localStorage.getItem("loggedin")) {
               return <Dashboard loggedInUser={this.state.loggedInUser} {...props} />
             } else {

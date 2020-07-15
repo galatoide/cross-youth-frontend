@@ -2056,3 +2056,11 @@ footer.page-footer {
       font-size: 0.8rem;
   }
 }
+
+
+/* My css */
+
+.detail-title {
+  font-weight: 700;
+  display: block;
+}
